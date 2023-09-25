@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>JSON Placeholder Axios</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #92bcda;
+    }
+    .card {
+      padding: 10px;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 3em;
+      padding: 0 0 10px 0;
+    }
+    .card-description {
+      font-weight: 400;
+      font-size: 2em;
+    }
+  </style>
+</head>
+<body>
+  <template id="card-template">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title"></div>
+        <div class="card-text"></div>
+      </div>
+    </div>
+  </template>
+  <div id="card-list"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+  <script>
+    function addCard(title, body) {
+      const template = document.getElementById("card-template").content.cloneNode(true);
+      template.querySelector('.card-title').innerText = title;
+      template.querySelector('.card-text').innerText = body;
+      document.getElementById('card-list').appendChild(template);
+    }
+
+
+    axios.get("https://jsonplaceholder.typicode.com/posts?_limit=10")
+      .then((response) => {
+
+        response.data.forEach((post) => {
+          addCard(post.title, post.body);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+
+    axios
+      .post("https://jsonplaceholder.typicode.com/posts", {
+        title: "The Studio",
+        body: "Something funny",
+        userId: 1,
+      })
+      .then((response) => {
+        console.log("POST response:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error posting data:", error);
+      });
+  </script>
+</body>
+</html>
